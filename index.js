@@ -9,6 +9,7 @@ const user = require("./routes/user.js");
 
 app.use(formidable());
 
+//user route
 app.use("/user", user);
 
 app.listen(process.env.PORT, (req, res) => {
