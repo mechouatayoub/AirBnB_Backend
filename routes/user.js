@@ -5,6 +5,7 @@ const encBase64 = require("crypto-js/enc-base64");
 const uid2 = require("uid2");
 const User = require("../models/User.js");
 
+// Check whether the email is used or not
 async function findEmail(req, res, next) {
   try {
     let email = req.fields.email;
@@ -22,6 +23,7 @@ async function findEmail(req, res, next) {
   }
 }
 
+//Check whether the username is used or not
 async function findUserName(req, res, next) {
   try {
     let username = req.fields.username;
@@ -38,6 +40,7 @@ async function findUserName(req, res, next) {
   }
 }
 
+//Check whether the passwords are dissimilar
 async function checkPasswords(req, res, next) {
   try {
     let password1 = req.fields.password1;
@@ -60,8 +63,9 @@ async function checkPasswords(req, res, next) {
   }
 }
 
+//Create the account if it does not exist and mandatory data are coherent and available
 router.post(
-  "/create",
+  "/signup",
   findEmail,
   findUserName,
   checkPasswords,
@@ -83,5 +87,32 @@ router.post(
     }
   }
 );
+
+router.get("/signin", async (req, res) => {
+  let emailInbound = req.fields.email;
+  let passwordInbound = req.fields.password;
+
+  try {
+    let user = await User.findOne({ email: emailInbound });
+    if (user) {
+      console.log(user);
+      let hash = SHA256(passwordInbound + user.salt).toString(encBase64);
+      if (hash === user.hash) {
+        res.status(200).json({ user_id: user._id, token: user.token });
+      } else {
+        res.status(400).json({
+          message: "Mot de passe erroné",
+        });
+      }
+    } else {
+      res.status(400).json({
+        message: "Utilisateur non enregistré. Veuillez créer un compte",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json("Nous rencontrons un problème de connexion");
+  }
+});
 
 module.exports = router;
