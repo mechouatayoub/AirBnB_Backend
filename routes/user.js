@@ -88,6 +88,7 @@ router.post(
   }
 );
 
+//Sign in route and sends token to the user
 router.get("/signin", async (req, res) => {
   let emailInbound = req.fields.email;
   let passwordInbound = req.fields.password;
