@@ -15,7 +15,7 @@ async function findEmail(req, res, next) {
       next();
     } else {
       console.log(user);
-      res.status(400).json("Utilisateur existant1");
+      res.status(400).json("Email déjà utilisé");
     }
   } catch (error) {
     console.log(error);
@@ -32,7 +32,7 @@ async function findUserName(req, res, next) {
       next();
     } else {
       console.log(user);
-      res.status(400).json("Utilisateur existant2");
+      res.status(400).json("Pseudonyme déjà utilisé");
     }
   } catch (error) {
     console.log(error);
