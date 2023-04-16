@@ -101,14 +101,12 @@ router.post("/signin", async (req, res) => {
       if (hash === user.hash) {
         res.status(200).json({ user_id: user._id, token: user.token });
       } else {
-        res.status(400).json({
-          message: "Mot de passe erroné",
-        });
+        res.status(400).json("Mot de passe erroné");
       }
     } else {
-      res.status(400).json({
-        message: "Utilisateur non enregistré. Veuillez créer un compte",
-      });
+      res
+        .status(400)
+        .json("Utilisateur non enregistré. Veuillez créer un compte");
     }
   } catch (error) {
     console.log(error);
